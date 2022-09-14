@@ -1,7 +1,6 @@
 # Common build stage
-FROM node:15.8.0-alpine3.12 as common-build-stage
+FROM node:14.14.0-alpine3.12 as common-build-stage
 
-# Create app directory
 COPY . ./app
 
 WORKDIR /app
