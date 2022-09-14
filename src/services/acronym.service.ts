@@ -31,13 +31,13 @@ class AcronymService {
     return createData;
   }
 
-  public async updateData(acronym: string, definition: string): Promise<Acronym[]> {
+  public async updateData(acronym: string, definition: string): Promise<any> {
     if (acronym) {
       const findData: Acronym = await this.acronym.findOne({ acronym: acronym });
       if (findData && findData.acronym != acronym) throw new HttpException(409, `This acronym ${acronym} already exists`);
     }
 
-    const updateDataByAcronym: Acronym[] = await this.acronym.update({ acronym: acronym }, { definition: definition });
+    const updateDataByAcronym: any = await this.acronym.update({ acronym: acronym }, { definition: definition });
     if (!updateDataByAcronym) throw new HttpException(409, "Acronym doesn't exist");
 
     return updateDataByAcronym;

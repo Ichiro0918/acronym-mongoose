@@ -6,7 +6,7 @@ import helmet from 'helmet';
 import hpp from 'hpp';
 import morgan from 'morgan';
 import { connect, set } from 'mongoose';
-import swaggerJSDoc from 'swagger-jsdoc';
+// import swaggerJSDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
 import { NODE_ENV, PORT, LOG_FORMAT, ORIGIN, CREDENTIALS } from '@config';
 import { dbConnection } from 'databases';
@@ -50,13 +50,7 @@ class App {
       set('debug', true);
     }
 
-    connect(dbConnection.url, dbConnection.options)
-      .then(() => {
-        console.log('Connected to the database ');
-      })
-      .catch(err => {
-        console.error(`Error connecting to the database. n${err}`);
-      });
+    connect(dbConnection.url, dbConnection.options);
   }
 
   private initializeMiddlewares() {
@@ -88,26 +82,26 @@ class App {
     //   apis: ['swagger.yaml'],
     // };
 
-    const options = {
-      definition: {
-        openapi: '3.0.0',
-        info: {
-          title: 'Acronym API',
-          version: '1.0.0',
-          description: 'Build a REST API for the World Texting Foundation, also known as WTF',
-        },
+    // const options = {
+    //   definition: {
+    //     openapi: '3.0.0',
+    //     info: {
+    //       title: 'Acronym API',
+    //       version: '1.0.0',
+    //       description: 'Build a REST API for the World Texting Foundation, also known as WTF',
+    //     },
 
-        servers: [
-          {
-            url: 'http://localhost:3000',
-            description: 'My API Documentation',
-          },
-        ],
-      },
-      apis: ['swagger.json'],
-    };
+    //     servers: [
+    //       {
+    //         url: 'http://localhost:3000',
+    //         description: 'My API Documentation',
+    //       },
+    //     ],
+    //   },
+    //   apis: ['swagger.json'],
+    // };
 
-    const specs = swaggerJSDoc(options);
+    // const specs = swaggerJSDoc(options);
     this.app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerJSON));
   }
 
