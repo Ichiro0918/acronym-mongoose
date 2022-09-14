@@ -6,14 +6,14 @@ import { Acronym } from '@interfaces/acronym.interface';
 class AcronymService {
   public acronym = acronymModel;
 
-  public async findDataByFilter(from: number, limit: number, search: string): Promise<Acronym> {
+  public async findDataByFilter(from: number, limit: number, search: string): Promise<Acronym[]> {
     if (from < 0 || limit < 0) {
       throw new HttpException(409, 'Params invalid');
     }
     if (search === 'undefined') {
       search = '';
     }
-    const findAcronym: Acronym = await this.acronym
+    const findAcronym: Acronym[] = await this.acronym
       .find({ acronym: { $regex: search } })
       .skip(from)
       .limit(limit);
@@ -43,7 +43,7 @@ class AcronymService {
     return updateDataByAcronym;
   }
 
-  public async deleteData(acronym: string): Promise<any[]> {
+  public async deleteData(acronym: string): Promise<Acronym[]> {
     const deleteDataByAcronym: Acronym[] = await this.acronym.remove({ acronym: acronym });
     if (!deleteDataByAcronym) throw new HttpException(409, "Acronym doesn't exist");
 
