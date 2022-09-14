@@ -14,10 +14,9 @@ const _helmet = _interopRequireDefault(require("helmet"));
 const _hpp = _interopRequireDefault(require("hpp"));
 const _morgan = _interopRequireDefault(require("morgan"));
 const _mongoose = require("mongoose");
-const _swaggerJsdoc = _interopRequireDefault(require("swagger-jsdoc"));
 const _swaggerUiExpress = _interopRequireDefault(require("swagger-ui-express"));
 const _config = require("./config");
-const _databases = require("databases");
+const _databases = require("./databases/index");
 const _errorMiddleware = _interopRequireDefault(require("./middlewares/error.middleware"));
 const _logger = require("./utils/logger");
 function _interopRequireDefault(obj) {
@@ -42,11 +41,7 @@ let App = class App {
         if (this.env !== 'production') {
             (0, _mongoose.set)('debug', true);
         }
-        (0, _mongoose.connect)(_databases.dbConnection.url, _databases.dbConnection.options).then(()=>{
-            console.log('Connected to the database ');
-        }).catch((err)=>{
-            console.error(`Error connecting to the database. n${err}`);
-        });
+        (0, _mongoose.connect)(_databases.dbConnection.url, _databases.dbConnection.options);
     }
     initializeMiddlewares() {
         this.app.use((0, _morgan.default)(_config.LOG_FORMAT, {
@@ -71,26 +66,6 @@ let App = class App {
         });
     }
     initializeSwagger() {
-        const options = {
-            definition: {
-                openapi: '3.0.0',
-                info: {
-                    title: 'Acronym API',
-                    version: '1.0.0',
-                    description: 'Build a REST API for the World Texting Foundation, also known as WTF'
-                },
-                servers: [
-                    {
-                        url: 'http://localhost:3000',
-                        description: 'My API Documentation'
-                    }, 
-                ]
-            },
-            apis: [
-                'swagger.json'
-            ]
-        };
-        const specs = (0, _swaggerJsdoc.default)(options);
         this.app.use('/api-docs', _swaggerUiExpress.default.serve, _swaggerUiExpress.default.setup(swaggerJSON));
     }
     initializeErrorHandling() {
